@@ -8,7 +8,7 @@
         </style>
     </head>
     <body>
-        <form id="form" >
+        <form id="form" onsubmit="submission()">
             <input type="text" id="description" name="description"><br>
             <input type="submit" value="Create">
         </form>
@@ -19,7 +19,7 @@
             {% endfor %}
         </ul>
         <script>
-            document.getElementById('form').onSubmit()=function(e){
+            function submission(e){
                 e.preventDefault();
                 fetch('/TODOAPP/create',{
                     method:'POST',
@@ -30,18 +30,14 @@
                         'Content-Type': 'application/json'
                     }
                 })
-                .then(function(response){
-                    return response.json();
-                }) //extract the JSON body content from the response object
                 .then(function(jsonResponse){
-                    console.log(jsonResponse);
-                    const liItem = document.createElement('LI');
-                    liItem.innerHTML = jsonResponse['description'];
+                    const liItem = document.createElement('li');
+                    liItem.textContent = jsonResponse['description'];
                     document.getElementById('todos').appendChild(liItem);
                     document.getElementById('error').className='hidden';
                 })
                 .catch(function(){
-                    cdocument.getElementById('error').className='';
+                    document.getElementById('error').className='';
                 })
             }
         </script>
